@@ -5,6 +5,7 @@
 //https://www.arduino.cc/reference/en/language/functions/usb/keyboard/keyboardmodifiers/
 #include "Rotary.h" //for rotary encoder
 #include "Button2.h" //for button on rotary encoder
+#include "CtrlLed.h" //for controling LEDs
 
 //=====================================TODO=====================================
 //move panic links array to better spot probably by key 8 pressed code
@@ -17,13 +18,13 @@
 //==============================================================================
 
 //setup pins for rotary encoder
-#define ROTARY1_PIN1 10
-#define ROTARY1_PIN2 16
-#define BUTTON1_PIN 14 //setup pin rotary emcoder is connected to, connect other side of button to GND
+#define ROTARY1_PIN1 A0
+#define ROTARY1_PIN2 A1
+#define BUTTON1_PIN 1 //setup pin rotary emcoder is connected to, connect other side of button to GND
 //setup second rotary encoder pins
-#define ROTARY2_PIN1 A0
-#define ROTARY2_PIN2 A1
-#define BUTTON2_PIN 15
+#define ROTARY2_PIN1 A2
+#define ROTARY2_PIN2 A3
+#define BUTTON2_PIN 0
 #define CLICKS_PER_STEP 4 //depends on your rotary encoder
 Rotary rotary1, rotary2; //idk what this does but rotary dosent work without it
 Button2 button1, button2; //same with the one for rotary idk what this does but it breaks without this
@@ -70,7 +71,6 @@ void setup() {
 }
 
 void loop() {
-  switch()
   rotary1.loop();
   rotary2.loop();
   button1.loop();
