@@ -12,7 +12,6 @@
 //add multi key support???
 //add key combos?
 //make pressing profile select rotary encoder turn LEDs off and switch to sending popups to tell profile selected
-//fix when the profile select rotary encoder goes into the negitive and all LEDs are off
 //add persistance to LED on or off status with eeprom library https://docs.arduino.cc/learn/built-in-libraries/eeprom/
 //==============================================================================
 
