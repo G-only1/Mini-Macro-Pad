@@ -13,7 +13,6 @@
 //add key combos?
 //make pressing profile select rotary encoder turn LEDs off and switc to sendingpopups to tell profile
 //fix when the profile select rotary encoder goes into the negitive and all LEDs are off
-//Fix only key 1-9 working pin 10 not then pins 11-16 thinking that theyre the pin thats the second digit
 //==============================================================================
 
 //setup pins for rotary encoder
@@ -41,10 +40,10 @@ int currentState = 0;
 const byte ROWS = 4;  //four rows
 const byte COLS = 4;  //four columns
 char keys[ROWS][COLS] = {
-  { '1', '2', '3', '4' },
-  { '5', '6', '7', '8' },
-  { '9', '10', '11', '12' },
-  { '13', '14', '15', '16' },
+  { 1, 2, 3, 4 },
+  { 5, 6, 7, 8 },
+  { 9, 10, 11, 12 },
+  { 13, 14, 15, 16 },
 };
 
 byte rowPins[ROWS] = { 6, 7, 8, 9 };  //connect to the row pinouts of the keypad
@@ -135,8 +134,8 @@ void ChangeStateDown(){
 
 void Layout1(char button){
   switch(button){
-    case '1'://
-      Serial.println("key 1 pressed, opening task manager");
+    case 1://
+      Serial.println(F("key 1 pressed, opening task manager"));
       Keyboard.press(KEY_LEFT_CTRL);
       //delay(50);
       Keyboard.press(KEY_LEFT_SHIFT);
@@ -145,8 +144,8 @@ void Layout1(char button){
       //delay(50);
       Keyboard.releaseAll();
       break;
-    case '2'://
-    Serial.println("key 2 pressed, opening powershell"); //print whats going on to serial monitor
+    case 2://
+    Serial.println(F("key 2 pressed, opening powershell")); //print whats going on to serial monitor
       //opens windows run dialog then types into the box and presses enter
       Keyboard.press(KEY_LEFT_GUI); //hold left windows key
       delay(25);
@@ -156,8 +155,8 @@ void Layout1(char button){
       Keyboard.println("powershell"); //type powershell and press enter
       Keyboard.write(224); //press enter
       break;
-    case '3'://
-      Serial.println("key 3 pressed, opening notepad");
+    case 3://
+      Serial.println(F("key 3 pressed, opening notepad"));
       Keyboard.press(KEY_LEFT_GUI); //hold left windows key
       delay(25);
       Keyboard.press(114); //hold r
@@ -166,8 +165,8 @@ void Layout1(char button){
       Keyboard.println("notepad"); //type something and press enterotary1. change this to change what the key opens
       Keyboard.write(224); //press enter
       break;
-    case '4'://
-      Serial.println("key 4 pressed, opening spotify");
+    case 4://
+      Serial.println(F("key 4 pressed, opening spotify"));
       Keyboard.press(KEY_LEFT_GUI); //hold left windows key
       delay(25);
       Keyboard.press(114); //hold r
@@ -176,15 +175,15 @@ void Layout1(char button){
       Keyboard.println("spotify"); //type something and press enterotary1. change this to change what the key opens
       Keyboard.write(224); //press enter
       break;
-    case '5'://
-    Serial.println("key 5 pressed, opening file explorer");
+    case 5://
+    Serial.println(F("key 5 pressed, opening file explorer"));
         Keyboard.press(KEY_LEFT_GUI); //hold left windows key
         delay(25);
         Keyboard.press(101); //hold e
         Keyboard.releaseAll(); //release all keys
       break;
-    case '6'://
-    Serial.println("key 6 pressed, opening firefox");
+    case 6://
+    Serial.println(F("key 6 pressed, opening firefox"));
         Keyboard.press(KEY_LEFT_GUI); //hold left windows key
         delay(25);
         Keyboard.press(114); //hold r
@@ -193,16 +192,16 @@ void Layout1(char button){
         Keyboard.println("firefox"); //type something and press enterotary1. change this to change what the key opens
         Keyboard.write(224); //press enter
       break;
-    case '7'://
-     Serial.println("key 7 pressed, minimizing all windows");
+    case 7://
+     Serial.println(F("key 7 pressed, minimizing all windows"));
         Keyboard.press(KEY_LEFT_GUI); //hold left windows key
         delay(25);
         Keyboard.press(100); //hold d
         delay(25);
         Keyboard.releaseAll(); //release all keys
       break;
-    case '8'://
-    Serial.println("key 8 pressed, PANIK BUTON (minimize all windows pause all media then open firefox and play a youtube video)");
+    case 8://
+    Serial.println(F("key 8 pressed, PANIK BUTON (minimize all windows pause all media then open firefox and play a youtube video)"));
         //minimize all windows
         Keyboard.press(KEY_LEFT_GUI); //hold left windows key
         delay(25);
@@ -236,36 +235,36 @@ void Layout1(char button){
         Keyboard.println(link); //types random link from array of safe video links to play and hits enter
         Keyboard.write(224); //press enter
       break;
-    case '9'://
-      Serial.println("key 9 pressed, pausing all media");
+    case 9://
+      Serial.println(F("key 9 pressed, pausing all media"));
       Consumer.write(0xCD); //pause
       break;
-    case '10'://
-            Serial.println("key 10 pressed, volume up");
+    case 10://
+            Serial.println(F("key 10 pressed, volume up"));
         Consumer.write(0xE9); //volume up
       break;
-    case '11'://
-            Serial.println("key 11 pressed, volume down");
+    case 11://
+            Serial.println(F("key 11 pressed, volume down"));
         Consumer.write(0xEA); //volume down
       break;
-    case '12'://
-            Serial.println("key 12 pressed, muting audio");
+    case 12://
+            Serial.println(F("key 12 pressed, muting audio"));
         Consumer.write(0xE2); //mute
       break;
-    case '13'://
-            Serial.println("key 13 pressed, skipping song");
+    case 13://
+            Serial.println(F("key 13 pressed, skipping song"));
         Consumer.write(0x5B); //next media
       break;
-    case '14'://
-            Serial.println("key 14 pressed, bass down");
+    case 14://
+            Serial.println(F("key 14 pressed, bass down"));
         Consumer.write(0x0153);
       break;
-    case '15'://
-            Serial.println("key 15 pressed, bass up");
+    case 15://
+            Serial.println(F("key 15 pressed, bass up"));
         Consumer.write(0x0152);
       break;
-    case '16'://
-            Serial.println("key 16 pressed, opening calculator");
+    case 16://
+            Serial.println(F("key 16 pressed, opening calculator"));
         Consumer.write(0x0192);
       break;
   };
@@ -273,159 +272,159 @@ void Layout1(char button){
 
 void Layout2(char button){
   switch(button){
-    case '1'://
-      Serial.println("Layout 2, key 1 pressed");
+    case 1://
+      Serial.println(F("Layout 2, key 1 pressed"));
       break;
-    case '2'://
-      Serial.println("Layout 2, key 2 pressed");
+    case 2://
+      Serial.println(F("Layout 2, key 2 pressed"));
       break;
-    case '3'://
-      Serial.println("Layout 2, key 3 pressed");
+    case 3://
+      Serial.println(F("Layout 2, key 3 pressed"));
       break;
-    case '4'://
-      Serial.println("Layout 2, key 4 pressed");
+    case 4://
+      Serial.println(F("Layout 2, key 4 pressed"));
       break;
-    case '5'://
-      Serial.println("Layout 2, key 5 pressed");
+    case 5://
+      Serial.println(F("Layout 2, key 5 pressed"));
       break;
-    case '6'://Return
-      Serial.println("Layout 2, key 6 pressed");
+    case 6://Return
+      Serial.println(F("Layout 2, key 6 pressed"));
       break;
-    case '7'://Escape
-      Serial.println("Layout 2, key 7 pressed");
+    case 7://Escape
+      Serial.println(F("Layout 2, key 7 pressed"));
       break;
-    case '8'://
-      Serial.println("Layout 2, key 8 pressed");
+    case 8://
+      Serial.println(F("Layout 2, key 8 pressed"));
       break;
-    case '9'://
-      Serial.println("Layout 2, key 9 pressed");
+    case 9://
+      Serial.println(F("Layout 2, key 9 pressed"));
       break;
-    case '10'://
-      Serial.println("Layout 2, key 10 pressed");
+    case 10://
+      Serial.println(F("Layout 2, key 10 pressed"));
       break;
-    case '11'://
-      Serial.println("Layout 2, key 11 pressed");
+    case 11://
+      Serial.println(F("Layout 2, key 11 pressed"));
       break;
-    case '12'://
-      Serial.println("Layout 2, key 12 pressed");
+    case 12://
+      Serial.println(F("Layout 2, key 12 pressed"));
       break;
-    case '13'://
-      Serial.println("Layout 2, key 13 pressed");
+    case 13://
+      Serial.println(F("Layout 2, key 13 pressed"));
       break;
-    case '14'://
-      Serial.println("Layout 2, key 14 pressed");
+    case 14://
+      Serial.println(F("Layout 2, key 14 pressed"));
       break;
-    case '15'://
-      Serial.println("Layout 2, key 15 pressed");
+    case 15://
+      Serial.println(F("Layout 2, key 15 pressed"));
       break;
-    case '16'://
-      Serial.println("Layout 2, key 16 pressed");
+    case 16://
+      Serial.println(F("Layout 2, key 16 pressed"));
       break;
   };
 }
 
 void Layout3(char button){
   switch(button){
-    case '1'://
-      Serial.println("Layout 3, key 1 pressed");
+    case 1://
+      Serial.println(F("Layout 3, key 1 pressed"));
       break;
-    case '2'://
-      Serial.println("Layout 3, key 2 pressed");
+    case 2://
+      Serial.println(F("Layout 3, key 2 pressed"));
       break;
-    case '3'://
-      Serial.println("Layout 3, key 3 pressed");
+    case 3://
+      Serial.println(F("Layout 3, key 3 pressed"));
       break;
-    case '4'://
-      Serial.println("Layout 3, key 4 pressed");
+    case 4://
+      Serial.println(F("Layout 3, key 4 pressed"));
       break;
-    case '5'://
-      Serial.println("Layout 3, key 5 pressed");
+    case 5://
+      Serial.println(F("Layout 3, key 5 pressed"));
       break;
-    case '6'://Return
-      Serial.println("Layout 3, key 6 pressed");
+    case 6://Return
+      Serial.println(F("Layout 3, key 6 pressed"));
       break;
-    case '7'://Escape
-      Serial.println("Layout 3, key 7 pressed");
+    case 7://Escape
+      Serial.println(F("Layout 3, key 7 pressed"));
       break;
-    case '8'://
-      Serial.println("Layout 3, key 8 pressed");
+    case 8://
+      Serial.println(F("Layout 3, key 8 pressed"));
       break;
-    case '9'://
-      Serial.println("Layout 3, key 9 pressed");
+    case 9://
+      Serial.println(F("Layout 3, key 9 pressed"));
       break;
-    case '10'://
-      Serial.println("Layout 3, key 10 pressed");
+    case 10://
+      Serial.println(F("Layout 3, key 10 pressed"));
       break;
-    case '11'://
-      Serial.println("Layout 3, key 11 pressed");
+    case 11://
+      Serial.println(F("Layout 3, key 11 pressed"));
       break;
-    case '12'://
-      Serial.println("Layout 3, key 12 pressed");
+    case 12://
+      Serial.println(F("Layout 3, key 12 pressed"));
       break;
-    case '13'://
-      Serial.println("Layout 3, key 13 pressed");
+    case 13://
+      Serial.println(F("Layout 3, key 13 pressed"));
       break;
-    case '14'://
-      Serial.println("Layout 3, key 14 pressed");
+    case 14://
+      Serial.println(F("Layout 3, key 14 pressed"));
       break;
-    case '15'://
-      Serial.println("Layout 3, key 15 pressed");
+    case 15://
+      Serial.println(F("Layout 3, key 15 pressed"));
       break;
-    case '16'://
-      Serial.println("Layout 3, key 16 pressed");
+    case 16://
+      Serial.println(F("Layout 3, key 16 pressed"));
       break;
   };
 }
 
 void Layout4(char button){
   switch(button){
-    case '1'://
-      Serial.println("Layout 4, key 1 pressed");
+    case 1://
+      Serial.println(F("Layout 4, key 1 pressed"));
       break;
-    case '2'://
-      Serial.println("Layout 4, key 2 pressed");
+    case 2://
+      Serial.println(F("Layout 4, key 2 pressed"));
       break;
-    case '3'://
-      Serial.println("Layout 4, key 3 pressed");
+    case 3://
+      Serial.println(F("Layout 4, key 3 pressed"));
       break;
-    case '4'://
-      Serial.println("Layout 4, key 4 pressed");
+    case 4://
+      Serial.println(F("Layout 4, key 4 pressed"));
       break;
-    case '5'://
-      Serial.println("Layout 4, key 5 pressed");
+    case 5://
+      Serial.println(F("Layout 4, key 5 pressed"));
       break;
-    case '6'://Return
-      Serial.println("Layout 4, key 6 pressed");
+    case 6://Return
+      Serial.println(F("Layout 4, key 6 pressed"));
       break;
-    case '7'://Escape
-      Serial.println("Layout 4, key 7 pressed");
+    case 7://Escape
+      Serial.println(F("Layout 4, key 7 pressed"));
       break;
-    case '8'://
-      Serial.println("Layout 4, key 8 pressed");
+    case 8://
+      Serial.println(F("Layout 4, key 8 pressed"));
       break;
-    case '9'://
-      Serial.println("Layout 4, key 9 pressed");
+    case 9://
+      Serial.println(F("Layout 4, key 9 pressed"));
       break;
-    case '10'://
-      Serial.println("Layout 4, key 10 pressed");
+    case 10://
+      Serial.println(F("Layout 4, key 10 pressed"));
       break;
-    case '11'://
-      Serial.println("Layout 4, key 11 pressed");
+    case 11://
+      Serial.println(F("Layout 4, key 11 pressed"));
       break;
-    case '12'://
-      Serial.println("Layout 4, key 12 pressed");
+    case 12://
+      Serial.println(F("Layout 4, key 12 pressed"));
       break;
-    case '13'://
-      Serial.println("Layout 4, key 13 pressed");
+    case 13://
+      Serial.println(F("Layout 4, key 13 pressed"));
       break;
-    case '14'://
-      Serial.println("Layout 4, key 14 pressed");
+    case 14://
+      Serial.println(F("Layout 4, key 14 pressed"));
       break;
-    case '15'://
-      Serial.println("Layout 4, key 15 pressed");
+    case 15://
+      Serial.println(F("Layout 4, key 15 pressed"));
       break;
-    case '16'://
-      Serial.println("Layout 4, key 16 pressed");
+    case 16://
+      Serial.println(F("Layout 4, key 16 pressed"));
       break;
   };
 }
@@ -472,17 +471,17 @@ void rotate1(Rotary) {
 }
 
 void rotateLeft1(Rotary) {
-  Serial.println("Rotary1 Rotated left, volume down");
+  Serial.println(F("Rotary1 Rotated left, volume down"));
   Consumer.write(0xEA); //volume down
 }
 
 void rotateRight1(Rotary) {
-  Serial.println("Rotary1 Rotated right, volume up");
+  Serial.println(F("Rotary1 Rotated right, volume up"));
   Consumer.write(0xE9); //volume up
 }
 
 void clickButton1(Button2) {
-  Serial.println("Rotary1 Button1 pressed, mute toggled");
+  Serial.println(F("Rotary1 Button1 pressed, mute toggled"));
   Consumer.write(0xE2); //mute
 }
 
@@ -496,17 +495,17 @@ void rotate2(Rotary) {
 }
 
 void rotateLeft2(Rotary) {
-  Serial.println("Rotary2 Rotated left, State down. Current State: "); Serial.println(currentState);
+  Serial.println(F("Rotary2 Rotated left, State down. Current State: ")); Serial.println(currentState);
   ChangeStateDown();
 }
 
 void rotateRight2(Rotary) {
-  Serial.println("Rotary2 Rotated right, State up. Current State: "); Serial.println(currentState);
+  Serial.println(F("Rotary2 Rotated right, State up. Current State: ")); Serial.println(currentState);
   ChangeStateUp();
 }
 
 void clickButton2(Button2) {
-  Serial.println("Rotary2 Button2 pressed, mute toggled");
+  Serial.println(F("Rotary2 Button2 pressed, mute toggled"));
   Consumer.write(0xE2); //mute
 }
 
