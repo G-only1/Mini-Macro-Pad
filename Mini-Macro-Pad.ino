@@ -5,16 +5,15 @@
 //https://www.arduino.cc/reference/en/language/functions/usb/keyboard/keyboardmodifiers/
 #include "Rotary.h" //for rotary encoder
 #include "Button2.h" //for button on rotary encoder
-#include "CtrlLed.h" //for controling LEDs
+//#include "CtrlLed.h" //for controling LEDs
 
 //=====================================TODO=====================================
 //move panic links array to better spot probably by key 8 pressed code
 //add multi key support???
 //add key combos?
-//make holding a button switch between profiles and send a popup with msg command to tell what profile your on or use LEDs theres only 2 pins left so there could only be 2 profiles could use RGB LED meybe
-//could use second rotary encoder to switch profiles? and pressing it could turn indicator LED on or off
-//could use a RGB LED to get 3 colors instead of 2? nvm i killd the only rgb led i had
-//use ctrl library to control LEDs for profiles possibly replace other libraries with it too
+//make pressing profile select rotary encoder turn LEDs off and switc to sendingpopups to tell profile
+//fix when the profile select rotary encoder goes into the negitive and all LEDs are off
+//Fix only key 1-9 working pin 10 not then pins 11-16 thinking that theyre the pin thats the second digit
 //==============================================================================
 
 //setup pins for rotary encoder
@@ -29,13 +28,23 @@
 Rotary rotary1, rotary2; //idk what this does but rotary dosent work without it
 Button2 button1, button2; //same with the one for rotary idk what this does but it breaks without this
 
+//State LED pins
+int S1 = 15;
+int S2 = 14;
+int S3 = 16;
+int S4 = 10;
+const int numStates = 4;
+const int States[numStates] = {S1, S2, S3, S4};
+int currentState = 0;
+
+
 const byte ROWS = 4;  //four rows
 const byte COLS = 4;  //four columns
 char keys[ROWS][COLS] = {
-  { 1, 2, 3, 4 },
-  { 5, 6, 7, 8 },
-  { 9, 10, 11, 12 },
-  { 13, 14, 15, 16 },
+  { '1', '2', '3', '4' },
+  { '5', '6', '7', '8' },
+  { '9', '10', '11', '12' },
+  { '13', '14', '15', '16' },
 };
 
 byte rowPins[ROWS] = { 6, 7, 8, 9 };  //connect to the row pinouts of the keypad
@@ -48,6 +57,12 @@ int panicLinksLength = sizeof (panicLinks) / sizeof (panicLinks[0]);
 
 void setup() {
   Serial.begin(9600);
+  //set all state LEDs to off
+  for (int i = 0; i < numStates; i++){
+    pinMode(States[i], OUTPUT);
+    digitalWrite(States[i], LOW);
+  }
+
   Keyboard.begin();
   Consumer.begin();
   //begin rotary 1
@@ -68,67 +83,108 @@ void setup() {
   button2.begin(BUTTON2_PIN);
   button2.setTapHandler(clickButton2);
   button2.setLongClickHandler(holdButton2);
+
+  StartAnimation();
+  digitalWrite(States[currentState], HIGH);
 }
 
-void loop() {
-  rotary1.loop();
-  rotary2.loop();
-  button1.loop();
-  button2.loop();
-  char key = keypad.getKey();
-  if (key) {
-    if (keypad.stateChanged = true) {
-      //Serial.println("some key pressed");
-      if (keypad.isPressed(1)) {
-        Serial.println("key 1 pressed, opening task manager");
-        Keyboard.press(KEY_LEFT_CTRL);
-        //delay(50);
-        Keyboard.press(KEY_LEFT_SHIFT);
-        //delay(50);
-        Keyboard.press(KEY_ESC);
-        //delay(50);
-        Keyboard.releaseAll();
-      }
-      else if (keypad.isPressed(2)) {
-        Serial.println("key 2 pressed, opening powershell"); //print whats going on to serial monitor
-        //opens windows run dialog then types into the box and presses enter
-        Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-        delay(25);
-        Keyboard.press(114); //hold r
-        Keyboard.releaseAll(); //release all keys
-        delay(200);
-        Keyboard.println("powershell"); //type powershell and press enter
-        Keyboard.write(224); //press enter
-      }
-      else if (keypad.isPressed(3)) {
-        Serial.println("key 3 pressed, opening notepad");
-        Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-        delay(25);
-        Keyboard.press(114); //hold r
-        Keyboard.releaseAll(); //release all keys
-        delay(200);
-        Keyboard.println("notepad"); //type something and press enterotary1. change this to change what the key opens
-        Keyboard.write(224); //press enter
-      }
-      else if (keypad.isPressed(4)) {
-        Serial.println("key 4 pressed, opening spotify");
-        Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-        delay(25);
-        Keyboard.press(114); //hold r
-        Keyboard.releaseAll(); //release all keys
-        delay(200);
-        Keyboard.println("spotify"); //type something and press enterotary1. change this to change what the key opens
-        Keyboard.write(224); //press enter
-      }
-      else if (keypad.isPressed(5)) {
-        Serial.println("key 5 pressed, opening file explorer");
+void StartAnimation(){
+  int waitTime = 250;
+  digitalWrite(S1, HIGH);
+  delay(waitTime);
+  digitalWrite(S2, HIGH);
+  delay(waitTime);
+  digitalWrite(S3, HIGH);
+  delay(waitTime);
+  digitalWrite(S4, HIGH);
+  delay(waitTime);
+  digitalWrite(S1, LOW);
+  delay(waitTime);
+  digitalWrite(S2, LOW);
+  delay(waitTime);
+  digitalWrite(S3, LOW);
+  delay(waitTime);
+  digitalWrite(S4, LOW);
+  delay(waitTime);
+  return;
+}
+
+void ChangeStateUp(){
+  digitalWrite(States[currentState], LOW);
+  currentState++;
+  if (currentState >= numStates){
+    currentState = 0;
+  }
+  digitalWrite(States[currentState], HIGH);
+  //Serial.print("State Changed. Current State: "); Serial.println(currentState);
+  delay(100);
+  return;
+}
+
+void ChangeStateDown(){
+  digitalWrite(States[currentState], LOW);
+  currentState--;
+  if (currentState <= -1){
+    currentState = numStates;
+  }
+  digitalWrite(States[currentState], HIGH);
+  //Serial.print("State Changed. Current State: "); Serial.println(currentState);
+  delay(100);
+  return;
+}
+
+void Layout1(char button){
+  switch(button){
+    case '1'://
+      Serial.println("key 1 pressed, opening task manager");
+      Keyboard.press(KEY_LEFT_CTRL);
+      //delay(50);
+      Keyboard.press(KEY_LEFT_SHIFT);
+      //delay(50);
+      Keyboard.press(KEY_ESC);
+      //delay(50);
+      Keyboard.releaseAll();
+      break;
+    case '2'://
+    Serial.println("key 2 pressed, opening powershell"); //print whats going on to serial monitor
+      //opens windows run dialog then types into the box and presses enter
+      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+      delay(25);
+      Keyboard.press(114); //hold r
+      Keyboard.releaseAll(); //release all keys
+      delay(200);
+      Keyboard.println("powershell"); //type powershell and press enter
+      Keyboard.write(224); //press enter
+      break;
+    case '3'://
+      Serial.println("key 3 pressed, opening notepad");
+      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+      delay(25);
+      Keyboard.press(114); //hold r
+      Keyboard.releaseAll(); //release all keys
+      delay(200);
+      Keyboard.println("notepad"); //type something and press enterotary1. change this to change what the key opens
+      Keyboard.write(224); //press enter
+      break;
+    case '4'://
+      Serial.println("key 4 pressed, opening spotify");
+      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+      delay(25);
+      Keyboard.press(114); //hold r
+      Keyboard.releaseAll(); //release all keys
+      delay(200);
+      Keyboard.println("spotify"); //type something and press enterotary1. change this to change what the key opens
+      Keyboard.write(224); //press enter
+      break;
+    case '5'://
+    Serial.println("key 5 pressed, opening file explorer");
         Keyboard.press(KEY_LEFT_GUI); //hold left windows key
         delay(25);
         Keyboard.press(101); //hold e
         Keyboard.releaseAll(); //release all keys
-      }
-      else if (keypad.isPressed(6)) {
-        Serial.println("key 6 pressed, opening firefox");
+      break;
+    case '6'://
+    Serial.println("key 6 pressed, opening firefox");
         Keyboard.press(KEY_LEFT_GUI); //hold left windows key
         delay(25);
         Keyboard.press(114); //hold r
@@ -136,17 +192,17 @@ void loop() {
         delay(200);
         Keyboard.println("firefox"); //type something and press enterotary1. change this to change what the key opens
         Keyboard.write(224); //press enter
-      }
-      else if (keypad.isPressed(7)) {
-        Serial.println("key 7 pressed, minimizing all windows");
+      break;
+    case '7'://
+     Serial.println("key 7 pressed, minimizing all windows");
         Keyboard.press(KEY_LEFT_GUI); //hold left windows key
         delay(25);
         Keyboard.press(100); //hold d
         delay(25);
         Keyboard.releaseAll(); //release all keys
-      }
-      else if (keypad.isPressed(8)) {
-        Serial.println("key 8 pressed, PANIK BUTON (minimize all windows pause all media then open firefox and play a youtube video)");
+      break;
+    case '8'://
+    Serial.println("key 8 pressed, PANIK BUTON (minimize all windows pause all media then open firefox and play a youtube video)");
         //minimize all windows
         Keyboard.press(KEY_LEFT_GUI); //hold left windows key
         delay(25);
@@ -179,39 +235,233 @@ void loop() {
         Serial.println("link opened: "+link);
         Keyboard.println(link); //types random link from array of safe video links to play and hits enter
         Keyboard.write(224); //press enter
-      }
-      else if (keypad.isPressed(9)) {
-        Serial.println("key 9 pressed, pausing all media");
-        Consumer.write(0xCD); //pause
-      }
-      else if (keypad.isPressed(10)) {
-        Serial.println("key 10 pressed, volume up");
+      break;
+    case '9'://
+      Serial.println("key 9 pressed, pausing all media");
+      Consumer.write(0xCD); //pause
+      break;
+    case '10'://
+            Serial.println("key 10 pressed, volume up");
         Consumer.write(0xE9); //volume up
-      }
-      else if (keypad.isPressed(11)) {
-        Serial.println("key 11 pressed, volume down");
+      break;
+    case '11'://
+            Serial.println("key 11 pressed, volume down");
         Consumer.write(0xEA); //volume down
-      }
-      else if (keypad.isPressed(12)) {
-        Serial.println("key 12 pressed, muting audio");
+      break;
+    case '12'://
+            Serial.println("key 12 pressed, muting audio");
         Consumer.write(0xE2); //mute
-      }
-      else if (keypad.isPressed(13)) {
-        Serial.println("key 13 pressed, skipping song");
+      break;
+    case '13'://
+            Serial.println("key 13 pressed, skipping song");
         Consumer.write(0x5B); //next media
-      }
-      else if (keypad.isPressed(14)) {
-        Serial.println("key 14 pressed, bass down");
+      break;
+    case '14'://
+            Serial.println("key 14 pressed, bass down");
         Consumer.write(0x0153);
-      }
-      else if (keypad.isPressed(15)) {
-        Serial.println("key 15 pressed, bass up");
+      break;
+    case '15'://
+            Serial.println("key 15 pressed, bass up");
         Consumer.write(0x0152);
-      }
-      else if (keypad.isPressed(16)) {
-        Serial.println("key 16 pressed, opening calculator");
+      break;
+    case '16'://
+            Serial.println("key 16 pressed, opening calculator");
         Consumer.write(0x0192);
-      }
+      break;
+  };
+}
+
+void Layout2(char button){
+  switch(button){
+    case '1'://
+      Serial.println("Layout 2, key 1 pressed");
+      break;
+    case '2'://
+      Serial.println("Layout 2, key 2 pressed");
+      break;
+    case '3'://
+      Serial.println("Layout 2, key 3 pressed");
+      break;
+    case '4'://
+      Serial.println("Layout 2, key 4 pressed");
+      break;
+    case '5'://
+      Serial.println("Layout 2, key 5 pressed");
+      break;
+    case '6'://Return
+      Serial.println("Layout 2, key 6 pressed");
+      break;
+    case '7'://Escape
+      Serial.println("Layout 2, key 7 pressed");
+      break;
+    case '8'://
+      Serial.println("Layout 2, key 8 pressed");
+      break;
+    case '9'://
+      Serial.println("Layout 2, key 9 pressed");
+      break;
+    case '10'://
+      Serial.println("Layout 2, key 10 pressed");
+      break;
+    case '11'://
+      Serial.println("Layout 2, key 11 pressed");
+      break;
+    case '12'://
+      Serial.println("Layout 2, key 12 pressed");
+      break;
+    case '13'://
+      Serial.println("Layout 2, key 13 pressed");
+      break;
+    case '14'://
+      Serial.println("Layout 2, key 14 pressed");
+      break;
+    case '15'://
+      Serial.println("Layout 2, key 15 pressed");
+      break;
+    case '16'://
+      Serial.println("Layout 2, key 16 pressed");
+      break;
+  };
+}
+
+void Layout3(char button){
+  switch(button){
+    case '1'://
+      Serial.println("Layout 3, key 1 pressed");
+      break;
+    case '2'://
+      Serial.println("Layout 3, key 2 pressed");
+      break;
+    case '3'://
+      Serial.println("Layout 3, key 3 pressed");
+      break;
+    case '4'://
+      Serial.println("Layout 3, key 4 pressed");
+      break;
+    case '5'://
+      Serial.println("Layout 3, key 5 pressed");
+      break;
+    case '6'://Return
+      Serial.println("Layout 3, key 6 pressed");
+      break;
+    case '7'://Escape
+      Serial.println("Layout 3, key 7 pressed");
+      break;
+    case '8'://
+      Serial.println("Layout 3, key 8 pressed");
+      break;
+    case '9'://
+      Serial.println("Layout 3, key 9 pressed");
+      break;
+    case '10'://
+      Serial.println("Layout 3, key 10 pressed");
+      break;
+    case '11'://
+      Serial.println("Layout 3, key 11 pressed");
+      break;
+    case '12'://
+      Serial.println("Layout 3, key 12 pressed");
+      break;
+    case '13'://
+      Serial.println("Layout 3, key 13 pressed");
+      break;
+    case '14'://
+      Serial.println("Layout 3, key 14 pressed");
+      break;
+    case '15'://
+      Serial.println("Layout 3, key 15 pressed");
+      break;
+    case '16'://
+      Serial.println("Layout 3, key 16 pressed");
+      break;
+  };
+}
+
+void Layout4(char button){
+  switch(button){
+    case '1'://
+      Serial.println("Layout 4, key 1 pressed");
+      break;
+    case '2'://
+      Serial.println("Layout 4, key 2 pressed");
+      break;
+    case '3'://
+      Serial.println("Layout 4, key 3 pressed");
+      break;
+    case '4'://
+      Serial.println("Layout 4, key 4 pressed");
+      break;
+    case '5'://
+      Serial.println("Layout 4, key 5 pressed");
+      break;
+    case '6'://Return
+      Serial.println("Layout 4, key 6 pressed");
+      break;
+    case '7'://Escape
+      Serial.println("Layout 4, key 7 pressed");
+      break;
+    case '8'://
+      Serial.println("Layout 4, key 8 pressed");
+      break;
+    case '9'://
+      Serial.println("Layout 4, key 9 pressed");
+      break;
+    case '10'://
+      Serial.println("Layout 4, key 10 pressed");
+      break;
+    case '11'://
+      Serial.println("Layout 4, key 11 pressed");
+      break;
+    case '12'://
+      Serial.println("Layout 4, key 12 pressed");
+      break;
+    case '13'://
+      Serial.println("Layout 4, key 13 pressed");
+      break;
+    case '14'://
+      Serial.println("Layout 4, key 14 pressed");
+      break;
+    case '15'://
+      Serial.println("Layout 4, key 15 pressed");
+      break;
+    case '16'://
+      Serial.println("Layout 4, key 16 pressed");
+      break;
+  };
+}
+
+void loop() {
+  rotary1.loop();
+  rotary2.loop();
+  button1.loop();
+  button2.loop();
+  char key = keypad.getKey();
+  if(key) {
+    switch(key){
+      case '*':
+        // ChangeState();
+        break;
+      case '-':
+        Keyboard.press(KEY_RIGHT_CTRL);
+        Keyboard.press('s');
+        delay(10);
+        Keyboard.releaseAll();
+        break;
+      default:
+        switch(currentState){
+          case 0:
+            Layout1(key);
+            break;
+          case 1:
+            Layout2(key);
+            break;
+          case 2:
+            Layout3(key);
+            break;
+          case 3: 
+            Layout4(key);
+            break;
+        }
     }
   }
 }
@@ -246,13 +496,13 @@ void rotate2(Rotary) {
 }
 
 void rotateLeft2(Rotary) {
-  Serial.println("Rotary2 Rotated left, volume down");
-  Consumer.write(0xEA); //volume down
+  Serial.println("Rotary2 Rotated left, State down. Current State: "); Serial.println(currentState);
+  ChangeStateDown();
 }
 
 void rotateRight2(Rotary) {
-  Serial.println("Rotary2 Rotated right, volume up");
-  Consumer.write(0xE9); //volume up
+  Serial.println("Rotary2 Rotated right, State up. Current State: "); Serial.println(currentState);
+  ChangeStateUp();
 }
 
 void clickButton2(Button2) {
