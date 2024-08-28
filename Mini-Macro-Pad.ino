@@ -11,8 +11,9 @@
 //move panic links array to better spot probably by key 8 pressed code
 //add multi key support???
 //add key combos?
-//make pressing profile select rotary encoder turn LEDs off and switc to sendingpopups to tell profile
+//make pressing profile select rotary encoder turn LEDs off and switch to sending popups to tell profile selected
 //fix when the profile select rotary encoder goes into the negitive and all LEDs are off
+//add persistance to LED on or off status with eeprom library https://docs.arduino.cc/learn/built-in-libraries/eeprom/
 //==============================================================================
 
 //setup pins for rotary encoder
@@ -36,6 +37,7 @@ const int numStates = 4;
 const int States[numStates] = {S1, S2, S3, S4};
 int currentState = 0;
 
+bool LEDsOn = true; //to keep track of LED status
 
 const byte ROWS = 4;  //four rows
 const byte COLS = 4;  //four columns
@@ -124,12 +126,32 @@ void ChangeStateDown(){
   digitalWrite(States[currentState], LOW);
   currentState--;
   if (currentState <= -1){
-    currentState = numStates;
+    currentState = numStates - 1;
   }
   digitalWrite(States[currentState], HIGH);
   //Serial.print("State Changed. Current State: "); Serial.println(currentState);
   delay(100);
   return;
+}
+
+void toggleLEDs() {
+  if(LEDsOn == true) {
+      //set all state LEDs to off
+    for (int i = 0; i < numStates; i++){
+    pinMode(States[i], OUTPUT);
+    digitalWrite(States[i], LOW);
+    }
+    LEDsOn = false;
+    return;
+  } else if (LEDsOn == false) {
+      //set all state LEDs to on
+    for (int i = 0; i < numStates; i++){
+    pinMode(States[i], OUTPUT);
+    digitalWrite(States[i], HIGH);
+    }
+    LEDsOn = true;
+    return;
+  }
 }
 
 void Layout1(char button){
@@ -176,96 +198,96 @@ void Layout1(char button){
       Keyboard.write(224); //press enter
       break;
     case 5://
-    Serial.println(F("key 5 pressed, opening file explorer"));
-        Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-        delay(25);
-        Keyboard.press(101); //hold e
-        Keyboard.releaseAll(); //release all keys
+      Serial.println(F("key 5 pressed, opening file explorer"));
+      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+      delay(25);
+      Keyboard.press(101); //hold e
+      Keyboard.releaseAll(); //release all keys
       break;
     case 6://
     Serial.println(F("key 6 pressed, opening firefox"));
-        Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-        delay(25);
-        Keyboard.press(114); //hold r
-        Keyboard.releaseAll(); //release all keys
-        delay(200);
-        Keyboard.println("firefox"); //type something and press enterotary1. change this to change what the key opens
-        Keyboard.write(224); //press enter
+      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+      delay(25);
+      Keyboard.press(114); //hold r
+      Keyboard.releaseAll(); //release all keys
+      delay(200);
+      Keyboard.println("firefox"); //type something and press enterotary1. change this to change what the key opens
+      Keyboard.write(224); //press enter
       break;
     case 7://
-     Serial.println(F("key 7 pressed, minimizing all windows"));
-        Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-        delay(25);
-        Keyboard.press(100); //hold d
-        delay(25);
-        Keyboard.releaseAll(); //release all keys
+      Serial.println(F("key 7 pressed, minimizing all windows"));
+      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+      delay(25);
+      Keyboard.press(100); //hold d
+      delay(25);
+      Keyboard.releaseAll(); //release all keys
       break;
     case 8://
     Serial.println(F("key 8 pressed, PANIK BUTON (minimize all windows pause all media then open firefox and play a youtube video)"));
-        //minimize all windows
-        Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-        delay(25);
-        Keyboard.press(100); //hold d
-        delay(25);
-        Keyboard.releaseAll(); //release all keys
-        delay(25);
-        //pause all media
-        Consumer.write(0xB7); //stop all media
-        //open firefox
-        Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-        delay(25);
-        Keyboard.press(114); //hold r
-        Keyboard.releaseAll(); //release all keys
-        delay(200);
-        Keyboard.println("firefox"); //type something. change this to change what the key opens
-        Keyboard.write(224); //press enter
-        delay(250);
-        //open new firefox tab
-        Keyboard.press(KEY_LEFT_CTRL); //press and hold ctrl
-        Keyboard.press(116); //press t
-        Keyboard.releaseAll();
-        //open run dialoug
-        Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-        delay(25);
-        Keyboard.press(114); //hold r
-        Keyboard.releaseAll(); //release all keys
-        delay(200);
-        String link = panicLinks[random(panicLinksLength)]; //pick a random link from the array to open
-        Serial.println("link opened: "+link);
-        Keyboard.println(link); //types random link from array of safe video links to play and hits enter
-        Keyboard.write(224); //press enter
+      //minimize all windows
+      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+      delay(25);
+      Keyboard.press(100); //hold d
+      delay(25);
+      Keyboard.releaseAll(); //release all keys
+      delay(25);
+      //pause all media
+      Consumer.write(0xB7); //stop all media
+      //open firefox
+      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+      delay(25);
+      Keyboard.press(114); //hold r
+      Keyboard.releaseAll(); //release all keys
+      delay(200);
+      Keyboard.println("firefox"); //type something. change this to change what the key opens
+      Keyboard.write(224); //press enter
+      delay(250);
+      //open new firefox tab
+      Keyboard.press(KEY_LEFT_CTRL); //press and hold ctrl
+      Keyboard.press(116); //press t
+      Keyboard.releaseAll();
+      //open run dialoug
+      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+      delay(25);
+      Keyboard.press(114); //hold r
+      Keyboard.releaseAll(); //release all keys
+      delay(200);
+      String link = panicLinks[random(panicLinksLength)]; //pick a random link from the array to open
+      Serial.println("link opened: "+link);
+      Keyboard.println(link); //types random link from array of safe video links to play and hits enter
+      Keyboard.write(224); //press enter
       break;
     case 9://
       Serial.println(F("key 9 pressed, pausing all media"));
       Consumer.write(0xCD); //pause
       break;
     case 10://
-            Serial.println(F("key 10 pressed, volume up"));
-        Consumer.write(0xE9); //volume up
+      Serial.println(F("key 10 pressed, volume up"));
+      Consumer.write(0xE9); //volume up
       break;
     case 11://
-            Serial.println(F("key 11 pressed, volume down"));
-        Consumer.write(0xEA); //volume down
+      Serial.println(F("key 11 pressed, volume down"));
+      Consumer.write(0xEA); //volume down
       break;
     case 12://
-            Serial.println(F("key 12 pressed, muting audio"));
-        Consumer.write(0xE2); //mute
+      Serial.println(F("key 12 pressed, muting audio"));
+      Consumer.write(0xE2); //mute
       break;
     case 13://
-            Serial.println(F("key 13 pressed, skipping song"));
-        Consumer.write(0x5B); //next media
+      Serial.println(F("key 13 pressed, skipping song"));
+      Consumer.write(0x5B); //next media
       break;
     case 14://
-            Serial.println(F("key 14 pressed, bass down"));
-        Consumer.write(0x0153);
+      Serial.println(F("key 14 pressed, bass down"));
+      Consumer.write(0x0153);
       break;
     case 15://
-            Serial.println(F("key 15 pressed, bass up"));
-        Consumer.write(0x0152);
+      Serial.println(F("key 15 pressed, bass up"));
+      Consumer.write(0x0152);
       break;
     case 16://
-            Serial.println(F("key 16 pressed, opening calculator"));
-        Consumer.write(0x0192);
+      Serial.println(F("key 16 pressed, opening calculator"));
+      Consumer.write(0x0192);
       break;
   };
 }
@@ -495,18 +517,18 @@ void rotate2(Rotary) {
 }
 
 void rotateLeft2(Rotary) {
-  Serial.println(F("Rotary2 Rotated left, State down. Current State: ")); Serial.println(currentState);
+  Serial.print(F("Rotary2 Rotated left, State down. Current State: ")); Serial.println(currentState);
   ChangeStateDown();
 }
 
 void rotateRight2(Rotary) {
-  Serial.println(F("Rotary2 Rotated right, State up. Current State: ")); Serial.println(currentState);
+  Serial.print(F("Rotary2 Rotated right, State up. Current State: ")); Serial.println(currentState);
   ChangeStateUp();
 }
 
 void clickButton2(Button2) {
-  Serial.println(F("Rotary2 Button2 pressed, mute toggled"));
-  Consumer.write(0xE2); //mute
+  Serial.println(F("Rotary2 Button2 pressed, LEDs toggled"));
+  toggleLEDs();
 }
 
 void holdButton2(Button2) {
