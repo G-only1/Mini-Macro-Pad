@@ -157,140 +157,193 @@ void toggleLEDs() {
   }
 }
 
+// void Layout1(char button){
+//   switch(button){
+//     case 1://
+//       Serial.println(F("Layout 1, key 1 pressed, opening task manager"));
+//       Keyboard.press(KEY_LEFT_CTRL);
+//       //delay(50);
+//       Keyboard.press(KEY_LEFT_SHIFT);
+//       //delay(50);
+//       Keyboard.press(KEY_ESC);
+//       //delay(50);
+//       Keyboard.releaseAll();
+//       break;
+//     case 2://
+//     Serial.println(F("Layout 1, key 2 pressed, opening powershell")); //print whats going on to serial monitor
+//       //opens windows run dialog then types into the box and presses enter
+//       Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+//       delay(25);
+//       Keyboard.press(114); //hold r
+//       Keyboard.releaseAll(); //release all keys
+//       delay(200);
+//       Keyboard.println("powershell"); //type powershell and press enter
+//       Keyboard.write(224); //press enter
+//       break;
+//     case 3://
+//       Serial.println(F("Layout 1, key 3 pressed, opening notepad"));
+//       Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+//       delay(25);
+//       Keyboard.press(114); //hold r
+//       Keyboard.releaseAll(); //release all keys
+//       delay(200);
+//       Keyboard.println("notepad"); //type something and press enterotary1. change this to change what the key opens
+//       Keyboard.write(224); //press enter
+//       break;
+//     case 4://
+//       Serial.println(F("Layout 1, key 4 pressed, opening spotify"));
+//       Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+//       delay(25);
+//       Keyboard.press(114); //hold r
+//       Keyboard.releaseAll(); //release all keys
+//       delay(200);
+//       Keyboard.println("spotify"); //type something and press enterotary1. change this to change what the key opens
+//       Keyboard.write(224); //press enter
+//       break;
+//     case 5://
+//       Serial.println(F("Layout 1, key 5 pressed, opening file explorer"));
+//       Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+//       delay(25);
+//       Keyboard.press(101); //hold e
+//       Keyboard.releaseAll(); //release all keys
+//       break;
+//     case 6://
+//       Serial.println(F("Layout 1, key 6 pressed, opening firefox"));
+//       Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+//       delay(25);
+//       Keyboard.press(114); //hold r
+//       Keyboard.releaseAll(); //release all keys
+//       delay(200);
+//       Keyboard.println("firefox"); //type something and press enterotary1. change this to change what the key opens
+//       Keyboard.write(224); //press enter
+//       break;
+//     case 7://
+//       Serial.println(F("Layout 1, key 7 pressed, minimizing all windows"));
+//       Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+//       delay(25);
+//       Keyboard.press(100); //hold d
+//       delay(25);
+//       Keyboard.releaseAll(); //release all keys
+//       break;
+//     case 8://
+//     Serial.println(F("Layout 1, key 8 pressed, PANIK BUTON (minimize all windows pause all media then open firefox and play a youtube video)"));
+//       //minimize all windows
+//       Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+//       delay(25);
+//       Keyboard.press(100); //hold d
+//       delay(25);
+//       Keyboard.releaseAll(); //release all keys
+//       delay(25);
+//       //pause all media
+//       Consumer.write(0xB7); //stop all media
+//       //open firefox
+//       Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+//       delay(25);
+//       Keyboard.press(114); //hold r
+//       Keyboard.releaseAll(); //release all keys
+//       delay(200);
+//       Keyboard.println("firefox"); //type something. change this to change what the key opens
+//       Keyboard.write(224); //press enter
+//       delay(250);
+//       //open new firefox tab
+//       Keyboard.press(KEY_LEFT_CTRL); //press and hold ctrl
+//       Keyboard.press(116); //press t
+//       Keyboard.releaseAll();
+//       //open run dialoug
+//       Keyboard.press(KEY_LEFT_GUI); //hold left windows key
+//       delay(25);
+//       Keyboard.press(114); //hold r
+//       Keyboard.releaseAll(); //release all keys
+//       delay(200);
+//       String link = panicLinks[random(panicLinksLength)]; //pick a random link from the array to open
+//       Serial.println("link opened: "+link);
+//       Keyboard.println(link); //types random link from array of safe video links to play and hits enter
+//       Keyboard.write(224); //press enter
+//       break;
+//     case 9://
+//       Serial.println(F("Layout 1, key 9 pressed, pausing all media"));
+//       Consumer.write(0xCD); //pause
+//       break;
+//     case 10://
+//       Serial.println(F("Layout 1, key 10 pressed, volume up"));
+//       Consumer.write(0xE9); //volume up
+//       break;
+//     case 11://
+//       Serial.println(F("Layout 1, key 11 pressed, volume down"));
+//       Consumer.write(0xEA); //volume down
+//       break;
+//     case 12://
+//       Serial.println(F("Layout 1, key 12 pressed, muting audio"));
+//       Consumer.write(0xE2); //mute
+//       break;
+//     case 13://
+//       Serial.println(F("Layout 1, key 13 pressed, skipping song"));
+//       Consumer.write(0x5B); //next media
+//       break;
+//     case 14://
+//       Serial.println(F("Layout 1, key 14 pressed, bass down"));
+//       Consumer.write(0x0153);
+//       break;
+//     case 15://
+//       Serial.println(F("Layout 1, key 15 pressed, bass up"));
+//       Consumer.write(0x0152);
+//       break;
+//     case 16://
+//       Serial.println(F("Layout 1, key 16 pressed, opening calculator"));
+//       Consumer.write(0x0192);
+//       break;
+//   };
+// }
+
 void Layout1(char button){
   switch(button){
     case 1://
-      Serial.println(F("Layout 1, key 1 pressed, opening task manager"));
-      Keyboard.press(KEY_LEFT_CTRL);
-      //delay(50);
-      Keyboard.press(KEY_LEFT_SHIFT);
-      //delay(50);
-      Keyboard.press(KEY_ESC);
-      //delay(50);
-      Keyboard.releaseAll();
+      Serial.println(F("Layout 1, key 1 pressed"));
       break;
     case 2://
-    Serial.println(F("Layout 1, key 2 pressed, opening powershell")); //print whats going on to serial monitor
-      //opens windows run dialog then types into the box and presses enter
-      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-      delay(25);
-      Keyboard.press(114); //hold r
-      Keyboard.releaseAll(); //release all keys
-      delay(200);
-      Keyboard.println("powershell"); //type powershell and press enter
-      Keyboard.write(224); //press enter
+      Serial.println(F("Layout 1, key 2 pressed"));
       break;
     case 3://
-      Serial.println(F("Layout 1, key 3 pressed, opening notepad"));
-      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-      delay(25);
-      Keyboard.press(114); //hold r
-      Keyboard.releaseAll(); //release all keys
-      delay(200);
-      Keyboard.println("notepad"); //type something and press enterotary1. change this to change what the key opens
-      Keyboard.write(224); //press enter
+      Serial.println(F("Layout 1, key 3 pressed"));
       break;
     case 4://
-      Serial.println(F("Layout 1, key 4 pressed, opening spotify"));
-      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-      delay(25);
-      Keyboard.press(114); //hold r
-      Keyboard.releaseAll(); //release all keys
-      delay(200);
-      Keyboard.println("spotify"); //type something and press enterotary1. change this to change what the key opens
-      Keyboard.write(224); //press enter
+      Serial.println(F("Layout 1, key 4 pressed"));
       break;
     case 5://
-      Serial.println(F("Layout 1, key 5 pressed, opening file explorer"));
-      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-      delay(25);
-      Keyboard.press(101); //hold e
-      Keyboard.releaseAll(); //release all keys
+      Serial.println(F("Layout 1, key 5 pressed"));
       break;
-    case 6://
-      Serial.println(F("Layout 1, key 6 pressed, opening firefox"));
-      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-      delay(25);
-      Keyboard.press(114); //hold r
-      Keyboard.releaseAll(); //release all keys
-      delay(200);
-      Keyboard.println("firefox"); //type something and press enterotary1. change this to change what the key opens
-      Keyboard.write(224); //press enter
+    case 6://Return
+      Serial.println(F("Layout 1, key 6 pressed"));
       break;
-    case 7://
-      Serial.println(F("Layout 1, key 7 pressed, minimizing all windows"));
-      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-      delay(25);
-      Keyboard.press(100); //hold d
-      delay(25);
-      Keyboard.releaseAll(); //release all keys
+    case 7://Escape
+      Serial.println(F("Layout 1, key 7 pressed"));
       break;
     case 8://
-    Serial.println(F("Layout 1, key 8 pressed, PANIK BUTON (minimize all windows pause all media then open firefox and play a youtube video)"));
-      //minimize all windows
-      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-      delay(25);
-      Keyboard.press(100); //hold d
-      delay(25);
-      Keyboard.releaseAll(); //release all keys
-      delay(25);
-      //pause all media
-      Consumer.write(0xB7); //stop all media
-      //open firefox
-      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-      delay(25);
-      Keyboard.press(114); //hold r
-      Keyboard.releaseAll(); //release all keys
-      delay(200);
-      Keyboard.println("firefox"); //type something. change this to change what the key opens
-      Keyboard.write(224); //press enter
-      delay(250);
-      //open new firefox tab
-      Keyboard.press(KEY_LEFT_CTRL); //press and hold ctrl
-      Keyboard.press(116); //press t
-      Keyboard.releaseAll();
-      //open run dialoug
-      Keyboard.press(KEY_LEFT_GUI); //hold left windows key
-      delay(25);
-      Keyboard.press(114); //hold r
-      Keyboard.releaseAll(); //release all keys
-      delay(200);
-      String link = panicLinks[random(panicLinksLength)]; //pick a random link from the array to open
-      Serial.println("link opened: "+link);
-      Keyboard.println(link); //types random link from array of safe video links to play and hits enter
-      Keyboard.write(224); //press enter
+      Serial.println(F("Layout 1, key 8 pressed"));
       break;
     case 9://
-      Serial.println(F("Layout 1, key 9 pressed, pausing all media"));
-      Consumer.write(0xCD); //pause
+      Serial.println(F("Layout 1, key 9 pressed"));
       break;
     case 10://
-      Serial.println(F("Layout 1, key 10 pressed, volume up"));
-      Consumer.write(0xE9); //volume up
+      Serial.println(F("Layout 1, key 10 pressed"));
       break;
     case 11://
-      Serial.println(F("Layout 1, key 11 pressed, volume down"));
-      Consumer.write(0xEA); //volume down
+      Serial.println(F("Layout 1, key 11 pressed"));
       break;
     case 12://
-      Serial.println(F("Layout 1, key 12 pressed, muting audio"));
-      Consumer.write(0xE2); //mute
+      Serial.println(F("Layout 1, key 12 pressed"));
       break;
     case 13://
-      Serial.println(F("Layout 1, key 13 pressed, skipping song"));
-      Consumer.write(0x5B); //next media
+      Serial.println(F("Layout 1, key 13 pressed"));
       break;
     case 14://
-      Serial.println(F("Layout 1, key 14 pressed, bass down"));
-      Consumer.write(0x0153);
+      Serial.println(F("Layout 1, key 14 pressed"));
       break;
     case 15://
-      Serial.println(F("Layout 1, key 15 pressed, bass up"));
-      Consumer.write(0x0152);
+      Serial.println(F("Layout 1, key 15 pressed"));
       break;
     case 16://
-      Serial.println(F("Layout 1, key 16 pressed, opening calculator"));
-      Consumer.write(0x0192);
+      Serial.println(F("Layout 1, key 16 pressed"));
       break;
   };
 }
