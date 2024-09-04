@@ -372,7 +372,7 @@ void Layout1(char button){
       break;
     case 5://
       Serial.println(F("Layout 1, key 5 pressed"));
-
+      Keyboard.println(F("Layout 1, key 5 pressed"));
       break;
     case 6://Return
       Serial.println(F("Layout 1, key 6 pressed"));
